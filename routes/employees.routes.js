@@ -60,8 +60,11 @@ router.put('/employees/:id', async (req, res) => {
   try {
     const dep = await(Employee.findById(req.params.id));
     if(dep) {
-      await Employee.updateOne({ _id: req.params.id }, { $set: { firstName: firstName, lastName: lastName, department: department }});
-      res.json({ message: 'OK' });
+      dep.firstName = firstName;
+      dep.lastName = lastName;
+      dep.department = department;
+      await dep.save();
+      res.json(dep);
     }
     else res.status(404).json({ message: 'Not found...' });
   }

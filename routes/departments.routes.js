@@ -60,8 +60,9 @@ router.put('/departments/:id', async (req, res) => {
   try {
     const dep = await(Department.findById(req.params.id));
     if(dep) {
-      await Department.updateOne({ _id: req.params.id }, { $set: { name: name }});
-      res.json({ message: 'OK' });
+      dep.name = name;
+      await dep.save();
+      res.json(dep);
     }
     else res.status(404).json({ message: 'Not found...' });
   }
